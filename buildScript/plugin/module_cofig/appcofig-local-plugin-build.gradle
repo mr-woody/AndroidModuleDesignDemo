@@ -1,0 +1,53 @@
+apply plugin: 'com.woodys.appconfig.plugin'
+appConfig {
+
+    debugEnable true
+
+    apps {
+        app {
+            theme "@style/AppTheme"
+            application {
+                //mainActivity "com.woodys.module1.Module1MainActivity"
+                applicationName  "com.woodys.module1.demo.application.App1"
+            }
+            //modules ':module1', 'com.woodys.cache:cache-library:1.0.3-20190529.073900-1'
+            modules ':module1'
+        }
+
+        app2 {
+            name ':app2'
+            application {
+                applicationName  "com.woodys.module2.demo.application.App2"
+                mainActivity ".design.MainActivity"
+                applicationId 'com.woodys.module2.demo'
+            }
+            modules ':module1',
+                    ':module2'
+        }
+
+    }
+
+    modules {
+        module {
+            name ":module1"
+            application {
+                applicationId "com.woodys.module1"
+                mainActivity ".Module1MainActivity"
+                applicationName "com.woodys.commonbusiness.application.CommonApplication"
+            }
+            isRunAlone false
+            //runAloneChildModules ':module2', 'com.woodys.cache:cache-library:1.0.3-20190529.073900-1'
+            runAloneChildModules ':module2'
+        }
+
+        module2 {
+            theme "@style/AppTheme"
+            application {
+                applicationId "com.woodys.module2.test"
+                mainActivity ".Module2MainActivity"
+                applicationName "com.woodys.commonbusiness.application.CommonApplication"
+            }
+            isRunAlone true
+        }
+    }
+}

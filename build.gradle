@@ -1,0 +1,73 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    apply from: 'config/config.gradle'
+    repositories {
+        maven { url 'https://jitpack.io' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
+        google()
+        jcenter()
+        mavenLocal()
+
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:${versions.gradleVersion}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlinVersion}"
+
+        classpath "com.github.mr-woody.AndroidModuleDesignLibrary:component-plugin:1.0.0"
+        classpath "com.github.mr-woody.AndroidModuleDesignLibrary:autoRegister-plugin:1.0.0"
+        //api接口解决方案插件
+        classpath 'com.github.mr-woody.AndroidModuleDesignLibrary:componentApi-plugin:1.0.0'
+
+        classpath 'com.github.mr-woody.OkSuperCross:supercross-plugin:1.0.0'
+
+        //sonarqube代码规约检测插件
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.0"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
+        //umeng
+        maven { url 'http://dl.bintray.com/umsdk/release' }
+        google()
+        jcenter()
+        mavenLocal()
+
+    }
+}
+
+subprojects {
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == 'com.android.support') {
+                if (!requested.name.startsWith("multidex")) {
+                    details.useVersion versions.supportLibraryVersion
+                }else {
+                    details.useVersion "1.0.3"
+                }
+            }
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+//按照源码的方式进行配置
+apply from: 'buildScript/plugin/module_cofig/appcofig-local-plugin-build.gradle'
+//动态注入代码，解决IApplicationLife动态注册的问题
+apply from: 'buildScript/plugin/autoregister/autoregister-plugin-build.gradle'
+// api接口解决方案插件
+apply from: 'buildScript/plugin/api/api-cofig-plugin-build.gradle'
+
+//sonar方式进行配置
+apply from: 'buildScript/tools/sonar-project.gradle'
+

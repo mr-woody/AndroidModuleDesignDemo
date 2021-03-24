@@ -1,0 +1,14 @@
+apply plugin: 'com.woodys.auto-register'
+
+ext.registerInfoList = [
+        [
+                'scanInterface'             : 'com.woodys.component.api.IApplicationLife'
+                , 'codeInsertToClassName'   : 'com.woodys.component.api.ApplicationManager'
+                , 'registerMethodName'      : 'register' //非static方法
+        ]
+]
+
+autoregister {
+    registerInfo = registerInfoList
+    cacheEnabled = true
+}

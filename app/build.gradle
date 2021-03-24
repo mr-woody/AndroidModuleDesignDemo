@@ -1,0 +1,45 @@
+//apply plugin: 'com.android.application'
+apply plugin: 'com.woodys.modules.plugin'
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'com.woodys.supercross.plugin'
+
+android {
+    compileSdkVersion rootProject.ext.androids.compileSdkVersion as int
+    defaultConfig {
+        minSdkVersion rootProject.ext.androids.minSdkVersion
+        targetSdkVersion rootProject.ext.androids.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        // Enabling multidex support.
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexKeepProguard file('multiDexKeep.pro') // keep specific classes using proguard syntax
+        //multiDexKeepFile file('maindexlist.txt') // keep specific classes
+    }
+
+    flavorDimensions("default")
+    productFlavors{
+       full{
+           dimension "default"
+       }
+       simple{
+           dimension "default"
+       }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(":common-business")
+}
